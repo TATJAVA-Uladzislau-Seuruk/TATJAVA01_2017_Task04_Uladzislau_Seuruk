@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <Properties>
+    <Property name="filename">logs/log.log</Property>
+    <Property name="basePatternLayout">%d{ISO6801} [%-5p] (%F:%L) - %m%n</Property>
+  </Properties>
+  <appenders>
+    <File name="FILE" filename="${filename}" append="false">
+      <PatternLayout pattern="${basePatternLayout}"/>
+    </File>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+      <PatternLayout pattern="${basePatternLayout}"/>
+    </Console>
+  </appenders>
+  <loggers>
+    <root level="info">
+      <appender-ref ref="FILE"/>
+    </root>
+  </loggers>
+</configuration>
