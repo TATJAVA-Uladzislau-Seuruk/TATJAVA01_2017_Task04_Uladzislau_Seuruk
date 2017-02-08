@@ -1,6 +1,8 @@
 package com.epam.oop.dao.util.db;
 
 import com.epam.oop.dao.util.db.exception.ConnectionPoolException;
+import com.epam.oop.dao.util.db.properties.DbParameter;
+import com.epam.oop.dao.util.db.properties.DbPropertiesHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,17 +15,27 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 
 /**
- * .
+ * Implements pool of connections design pattern.
  *
  * @author Uladzislau Seuruk.
  */
 public final class ConnectionPool {
     private static final Logger LOG = LogManager.getRootLogger();
+    /**
+     * Default number of opened connections.
+     */
     private static final int DEFAULT_POOL_SIZE = 5;
-
+    /**
+     * Instance of this class.
+     */
     private static ConnectionPool instance = new ConnectionPool();
-
+    /**
+     * Queue with occupied connections.
+     */
     private BlockingQueue<Connection> busyConnectionQueue;
+    /**
+     * Queue with free connections.
+     */
     private BlockingQueue<Connection> connectionQueue;
 
     private String driverName;
@@ -32,8 +44,11 @@ public final class ConnectionPool {
     private String user;
     private int poolSize;
 
+    /**
+     * Initializes fields with values from property file.
+     */
     private ConnectionPool() {
-        DbResourceManager manager = DbResourceManager.getInstance();
+        DbPropertiesHandler manager = DbPropertiesHandler.getInstance();
         driverName = manager.getValue(DbParameter.DB_DRIVER);
         password = manager.getValue(DbParameter.DB_PASSWORD);
         url = manager.getValue(DbParameter.DB_URL);
@@ -45,10 +60,18 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Returns instance of this class.
+     */
     public static ConnectionPool getInstance() {
         return instance;
     }
 
+    /**
+     * Frees received connection.
+     *
+     * @param connection <tt>Connection</tt> to close.
+     */
     public void closeConnection(Connection connection) {
         try {
             connection.close();
@@ -57,24 +80,32 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Closes received statement and frees connection.
+     *
+     * @param connection <tt>Connection</tt> to close.
+     * @param statement <tt>Statement</tt> to close.
+     */
     public void closeConnection(Connection connection, Statement statement) {
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            LOG.error("Statement wasn't closed.", e);
-        }
+        DbResourceManager.getInstance().closeStatement(statement);
         closeConnection(connection);
     }
 
-    public void closeConnection(Connection connection, Statement statement, ResultSet set) {
-        try {
-            set.close();
-        } catch (SQLException e) {
-            LOG.error("Result set wasn't closed.", e);
-        }
+    /**
+     * Releases received resources and frees connection.
+     *
+     * @param connection <tt>Connection</tt> to close.
+     * @param statement <tt>Statement</tt> to close.
+     * @param resultSet <tt>ResultSet</tt> to close.
+     */
+    public void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
+        DbResourceManager.getInstance().closeResultSet(resultSet);
         closeConnection(connection, statement);
     }
 
+    /**
+     * Closes all opened connections.
+     */
     public void dispose() {
         try {
             closeConnectionQueue(busyConnectionQueue);
@@ -84,6 +115,12 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Gets one of free connections.
+     *
+     * @return active <tt>Connection</tt> to database.
+     * @throws ConnectionPoolException requested <tt>Connection</tt> was interrupted while waiting.
+     */
     public Connection getConnection() throws ConnectionPoolException {
         try {
             Connection connection = connectionQueue.take();
@@ -94,10 +131,16 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Initializes connections to database.
+     *
+     * @throws ConnectionPoolException if driver for database was not found or attempt to connect to
+     * database was failed.
+     */
     public void initPoolData() throws ConnectionPoolException {
         Locale.setDefault(Locale.ENGLISH);
         try {
-            //Class.forName(driverName);
+            Class.forName(driverName);
             busyConnectionQueue = new ArrayBlockingQueue<>(poolSize);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
             for (int i = 0; i < poolSize; ++i) {
@@ -105,11 +148,17 @@ public final class ConnectionPool {
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 connectionQueue.add(pooledConnection);
             }
-        } catch (SQLException e) {//| ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new ConnectionPoolException(e.getMessage(), e);
         }
     }
 
+    /**
+     * Commits all changes made by connections at received queue and closes them all.
+     *
+     * @param queue <tt>BlockingQueue</tt> to close connections at.
+     * @throws SQLException if one of called method throws this exception.
+     */
     private void closeConnectionQueue(BlockingQueue<Connection> queue) throws SQLException {
         Connection connection;
         while ((connection = queue.poll()) != null) {
@@ -120,7 +169,14 @@ public final class ConnectionPool {
         }
     }
 
+    /**
+     * Encapsulates connection to database. Overrides 'close' method so it's not closing connection
+     * but add it to free connections queue.
+     */
     private class PooledConnection implements Connection {
+        /**
+         * Encapsulated connection.
+         */
         private Connection connection;
 
         public PooledConnection(Connection connection) {
@@ -135,7 +191,7 @@ public final class ConnectionPool {
             if (connection.isReadOnly()) {
                 connection.setReadOnly(false);
             }
-            if (!busyConnectionQueue.remove(connection)) {
+            if (!busyConnectionQueue.remove(this)) {
                 throw new SQLException("Error removing connection from the busy connections pool.");
             }
             if (!connectionQueue.offer(this)) {

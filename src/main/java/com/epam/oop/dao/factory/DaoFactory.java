@@ -2,7 +2,7 @@ package com.epam.oop.dao.factory;
 
 import com.epam.oop.dao.NewsDao;
 import com.epam.oop.dao.exception.DaoException;
-import com.epam.oop.dao.impl.FileNewsDao;
+import com.epam.oop.dao.impl.TxtNewsDao;
 import com.epam.oop.dao.impl.SqlNewsDao;
 
 /**
@@ -18,7 +18,7 @@ public class DaoFactory {
     /**
      * Instance of file DAO.
      */
-    private NewsDao newsFileDao = new FileNewsDao();
+    private NewsDao txtNewsDao = new TxtNewsDao();
     /**
      * Instance of sql DAO.
      */
@@ -34,8 +34,8 @@ public class DaoFactory {
     /**
      * Returns instance of file DAO.
      */
-    public NewsDao getFileNewsDao() {
-        return newsFileDao;
+    public NewsDao getTxtNewsDao() {
+        return txtNewsDao;
     }
 
     /**

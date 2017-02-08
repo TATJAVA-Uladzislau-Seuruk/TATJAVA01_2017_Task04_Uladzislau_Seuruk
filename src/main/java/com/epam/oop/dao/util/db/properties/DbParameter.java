@@ -1,6 +1,8 @@
-package com.epam.oop.dao.util.db;
+package com.epam.oop.dao.util.db.properties;
 
 /**
+ * Contains database parameter names.
+ *
  * @author Uladzislau Seuruk.
  */
 public final class DbParameter {

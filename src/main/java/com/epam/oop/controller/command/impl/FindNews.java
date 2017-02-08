@@ -28,8 +28,8 @@ public class FindNews implements Command {
             ServiceFactory factory = ServiceFactory.getInstance();
             List<News> newsList = factory.getCatalogService().getNews(params);
             StringBuilder builder = new StringBuilder();
-            for (News news : newsList) {
-                builder.append(getNewsInfo(news));
+            for (int i = 0; i < newsList.size(); ++i) {
+                addNewsInfo(builder, newsList.get(i), i+1);
             }
             return "Found news:" + builder.toString();
         } catch (ServiceException se) {
@@ -37,15 +37,14 @@ public class FindNews implements Command {
         }
     }
 
-    private String getNewsInfo(News news) {
-        StringBuilder builder = new StringBuilder();
+    private void addNewsInfo(StringBuilder builder, News news, int number) {
         builder.append("\n")
-                .append("\"")
+                .append(number)
+                .append(") \"")
                 .append(news.getTitle())
                 .append("\" Category: \"")
                 .append(news.getCategory())
                 .append("\" Publication Date: ")
                 .append(news.getPublicationDate());
-        return  builder.toString();
     }
 }

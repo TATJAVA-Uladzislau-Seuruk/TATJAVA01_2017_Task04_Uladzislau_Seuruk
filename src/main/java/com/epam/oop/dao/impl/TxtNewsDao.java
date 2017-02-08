@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation of DAO layer.
+ * Implementation of DAO layer for text file source.
  *
  * @author Uladzislau Seuruk.
  */
-public class FileNewsDao implements NewsDao {
+public class TxtNewsDao implements NewsDao {
     /**
      * Default path to file.
      */
