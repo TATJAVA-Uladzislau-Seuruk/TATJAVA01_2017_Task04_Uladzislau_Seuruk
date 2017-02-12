@@ -13,9 +13,6 @@ public class WrongRequest implements Command {
      */
     public static final String COMMAND_NAME = "WRONG_REQUEST";
 
-    /**
-     * @see Command#execute(String)
-     */
     @Override
     public String execute(String params) {
         return "Unknown command.";

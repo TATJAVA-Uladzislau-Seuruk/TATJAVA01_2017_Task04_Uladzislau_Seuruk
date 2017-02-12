@@ -1,8 +1,9 @@
 package com.epam.oop.dao.factory;
 
+import com.epam.oop.dao.DaoResourceManager;
 import com.epam.oop.dao.NewsDao;
 import com.epam.oop.dao.exception.DaoException;
-import com.epam.oop.dao.impl.TxtNewsDao;
+import com.epam.oop.dao.impl.DaoResourceManagerImpl;
 import com.epam.oop.dao.impl.SqlNewsDao;
 
 /**
@@ -16,13 +17,13 @@ public class DaoFactory {
      */
     private static DaoFactory instance = new DaoFactory();
     /**
-     * Instance of file DAO.
+     * Instance of DAO resource manager.
      */
-    private NewsDao txtNewsDao = new TxtNewsDao();
+    private DaoResourceManager resourceManager = new DaoResourceManagerImpl();
     /**
-     * Instance of sql DAO.
+     * Instance of News DAO.
      */
-    private NewsDao sqlNewsDao;
+    private NewsDao sqlNewsDao = new SqlNewsDao();
 
     /**
      * Returns instance of this class.
@@ -32,19 +33,16 @@ public class DaoFactory {
     }
 
     /**
-     * Returns instance of file DAO.
+     * Returns instance of News DAO.
      */
-    public NewsDao getTxtNewsDao() {
-        return txtNewsDao;
+    public NewsDao getNewsDao() throws DaoException {
+        return sqlNewsDao;
     }
 
     /**
-     * Returns instance of sql DAO.
+     * Returns instance of DAO resource manager.
      */
-    public NewsDao getSqlNewsDao() throws DaoException {
-        if (sqlNewsDao == null) {
-            sqlNewsDao = new SqlNewsDao();
-        }
-        return sqlNewsDao;
+    public DaoResourceManager getResourceManager() {
+        return resourceManager;
     }
 }

@@ -1,9 +1,7 @@
 package com.epam.oop.controller;
 
 import com.epam.oop.controller.command.Command;
-import com.epam.oop.controller.command.impl.AddNews;
-import com.epam.oop.controller.command.impl.FindNews;
-import com.epam.oop.controller.command.impl.WrongRequest;
+import com.epam.oop.controller.command.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +20,9 @@ final class CommandProvider {
     CommandProvider() {
         repository.put(AddNews.COMMAND_NAME, new AddNews());
         repository.put(FindNews.COMMAND_NAME, new FindNews());
+        repository.put(FindNewsByCategory.COMMAND_NAME, new FindNewsByCategory());
+        repository.put(FindNewsByDate.COMMAND_NAME, new FindNewsByDate());
+        repository.put(FindNewsByTitle.COMMAND_NAME, new FindNewsByTitle());
         repository.put(WrongRequest.COMMAND_NAME, new WrongRequest());
     }
 

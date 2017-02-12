@@ -1,11 +1,13 @@
 package com.epam.oop.dao.impl;
 
+import com.epam.oop.bean.Category;
 import com.epam.oop.bean.News;
 import com.epam.oop.dao.NewsDao;
+import com.epam.oop.dao.db.exception.DbManagerException;
 import com.epam.oop.dao.exception.DaoException;
-import com.epam.oop.dao.util.db.ConnectionPool;
-import com.epam.oop.dao.util.db.DbManager;
-import com.epam.oop.dao.util.db.exception.ConnectionPoolException;
+import com.epam.oop.dao.db.ConnectionPool;
+import com.epam.oop.dao.db.DbManager;
+import com.epam.oop.dao.db.exception.ConnectionPoolException;
 
 import java.sql.Connection;
 import java.util.List;
@@ -25,22 +27,6 @@ public class SqlNewsDao implements NewsDao {
      */
     private static final String TABLE_NAME = "news";
 
-    /**
-     * Initializes connection pool with connections.
-     *
-     * @throws DaoException if there were some troubles occurred while initialization.
-     */
-    public SqlNewsDao() throws DaoException {
-        try {
-            ConnectionPool.getInstance().initPoolData();
-        } catch (ConnectionPoolException cpe) {
-            throw new DaoException(cpe.getMessage(), cpe);
-        }
-    }
-
-    /**
-     * @see NewsDao#addNews(News)
-     */
     @Override
     public void addNews(News news) throws DaoException {
         Connection connection = null;
@@ -49,7 +35,7 @@ public class SqlNewsDao implements NewsDao {
             DbManager.getInstance().addNews(connection,
                                             DB_NAME + '.' + TABLE_NAME,
                                             news);
-        } catch (ConnectionPoolException e) {
+        } catch (ConnectionPoolException | DbManagerException e) {
             throw new DaoException(e.getMessage(), e);
         } finally {
             if (connection != null) {
@@ -58,9 +44,6 @@ public class SqlNewsDao implements NewsDao {
         }
     }
 
-    /**
-     * @see NewsDao#getNews(String...)
-     */
     @Override
     public List<News> getNews(String... tagArray) throws DaoException {
         Connection connection = null;
@@ -69,7 +52,58 @@ public class SqlNewsDao implements NewsDao {
             return DbManager.getInstance().getNewsByTags(connection,
                                                          DB_NAME + '.' + TABLE_NAME,
                                                          tagArray);
-        } catch (ConnectionPoolException e) {
+        } catch (ConnectionPoolException | DbManagerException e) {
+            throw new DaoException(e.getMessage(), e);
+        } finally {
+            if (connection != null) {
+                ConnectionPool.getInstance().closeConnection(connection);
+            }
+        }
+    }
+
+    @Override
+    public List<News> getNewsByCategory(Category... categories) throws DaoException {
+        Connection connection = null;
+        try {
+            connection = ConnectionPool.getInstance().getConnection();
+            return DbManager.getInstance().getNewsByCategory(connection,
+                    DB_NAME + '.' + TABLE_NAME,
+                    categories);
+        } catch (ConnectionPoolException | DbManagerException e) {
+            throw new DaoException(e.getMessage(), e);
+        } finally {
+            if (connection != null) {
+                ConnectionPool.getInstance().closeConnection(connection);
+            }
+        }
+    }
+
+    @Override
+    public List<News> getNewsByDate(String... dates) throws DaoException {
+        Connection connection = null;
+        try {
+            connection = ConnectionPool.getInstance().getConnection();
+            return DbManager.getInstance().getNewsByDate(connection,
+                    DB_NAME + '.' + TABLE_NAME,
+                    dates);
+        } catch (ConnectionPoolException | DbManagerException e) {
+            throw new DaoException(e.getMessage(), e);
+        } finally {
+            if (connection != null) {
+                ConnectionPool.getInstance().closeConnection(connection);
+            }
+        }
+    }
+
+    @Override
+    public List<News> getNewsByTitle(String... tags) throws DaoException {
+        Connection connection = null;
+        try {
+            connection = ConnectionPool.getInstance().getConnection();
+            return DbManager.getInstance().getNewsByTitle(connection,
+                    DB_NAME + '.' + TABLE_NAME,
+                    tags);
+        } catch (ConnectionPoolException | DbManagerException e) {
             throw new DaoException(e.getMessage(), e);
         } finally {
             if (connection != null) {

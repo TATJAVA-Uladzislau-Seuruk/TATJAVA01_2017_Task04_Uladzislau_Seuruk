@@ -12,16 +12,16 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 /**
- * Implements Command interface for search command.
+ * Implements Command interface for search by date command.
  *
  * @author Uladzislau Seuruk.
  */
-public class FindNews implements Command {
+public class FindNewsByDate implements Command {
     private static final Logger LOG = LogManager.getRootLogger();
     /**
      * Name of command.
      */
-    public static final String COMMAND_NAME = "FIND_NEWS";
+    public static final String COMMAND_NAME = "FIND_NEWS_BY_DATE";
 
     @Override
     public String execute(String params) {
@@ -36,7 +36,7 @@ public class FindNews implements Command {
             String paramsDelim = String.valueOf(ParameterParser.PARAMETER_DELIMITER);
             String[] paramsArray = params.split(paramsDelim);
             ServiceFactory factory = ServiceFactory.getInstance();
-            List<News> newsList = factory.getCatalogService().getNews(paramsArray);
+            List<News> newsList = factory.getCatalogService().getNewsByDate(paramsArray);
             response = SearchReportGenerator.generateReport(newsList);
         } catch (ServiceException e) {
             LOG.error(e.getMessage(), e);

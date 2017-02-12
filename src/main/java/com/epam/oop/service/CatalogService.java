@@ -1,5 +1,6 @@
 package com.epam.oop.service;
 
+import com.epam.oop.bean.Category;
 import com.epam.oop.bean.News;
 import com.epam.oop.service.exception.ServiceException;
 
@@ -14,10 +15,11 @@ public interface CatalogService {
     /**
      * Adds new news with received parameters.
      *
-     * @param params <tt>String</tt> with <tt>News</tt> parameters.
+     * @param category <tt>News</tt> <tt>Category</tt>.
+     * @param title <tt>String</tt> with <tt>News</tt> title.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    void addNews(String params) throws ServiceException;
+    void addNews(Category category, String title) throws ServiceException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received tags.
@@ -26,5 +28,32 @@ public interface CatalogService {
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    List<News> getNews(String tags) throws ServiceException;
+    List<News> getNews(String... tags) throws ServiceException;
+
+    /**
+     * Returns <tt>List</tt> with <tt>News</tt> that matches received category.
+     *
+     * @param categories <tt>Category</tt> to search.
+     * @return <tt>List</tt> with <tt>News</tt> that matches received category.
+     * @throws ServiceException if there were some troubles occurred during execution.
+     */
+    List<News> getNewsByCategory(Category... categories) throws ServiceException;
+
+    /**
+     * Returns <tt>List</tt> with <tt>News</tt> that matches received date.
+     *
+     * @param dates <tt>String</tt> with date for search.
+     * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
+     * @throws ServiceException if there were some troubles occurred during execution.
+     */
+    List<News> getNewsByDate(String... dates) throws ServiceException;
+
+    /**
+     * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.
+     *
+     * @param tags <tt>String</tt> with keywords for search.
+     * @return <tt>List</tt> with <tt>News</tt> which title contains received tags.
+     * @throws ServiceException if there were some troubles occurred during execution.
+     */
+    List<News> getNewsByTitle(String... tags) throws ServiceException;
 }

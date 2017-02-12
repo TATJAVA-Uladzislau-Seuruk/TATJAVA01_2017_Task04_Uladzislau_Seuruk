@@ -21,12 +21,29 @@ public class View {
     }
 
     /**
+     * TODO
+     */
+    public void finish() {
+        Controller.getInstance().finish();
+        System.out.println("Good bye!");
+    }
+
+    /**
      * Makes request to application.
      *
      * @param request <tt>String</tt> with request.
      */
     public void makeRequest(String request) {
         Controller controller = Controller.getInstance();
-        System.out.println(controller.executeCommand(request) + "\n");
+        String response = controller.executeCommand(request);
+        System.out.println(response + "\n");
+    }
+
+    /**
+     * TODO
+     */
+    public void start() {
+        String response = Controller.getInstance().start();
+        System.out.println(response + "\n");
     }
 }
