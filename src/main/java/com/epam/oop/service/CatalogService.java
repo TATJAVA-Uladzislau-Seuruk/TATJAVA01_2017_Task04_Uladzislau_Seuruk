@@ -40,13 +40,13 @@ public interface CatalogService {
     List<News> getNewsByCategory(Category... categories) throws ServiceException;
 
     /**
-     * Returns <tt>List</tt> with <tt>News</tt> that matches received date.
+     * Returns <tt>List</tt> with <tt>News</tt> that was added after received date.
      *
-     * @param dates <tt>String</tt> with date for search.
+     * @param date <tt>String</tt> with date for search.
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByDate(String... dates) throws ServiceException;
+    List<News> getNewsSinceDate(String date) throws ServiceException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.

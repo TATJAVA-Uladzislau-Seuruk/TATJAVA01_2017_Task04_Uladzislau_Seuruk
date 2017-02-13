@@ -16,9 +16,10 @@ public class Main {
         view.makeRequest("add_news category=film title=\"");
         view.makeRequest("add_news category=film");
         view.makeRequest("add_news category=film title=\"Second Earth\"");
-        view.makeRequest("find_news film");
-        view.makeRequest("find_news 100");
+        view.makeRequest("find_news_by_category film");
+        view.makeRequest("find_news_by_title 100");
         view.makeRequest("find_news 100 book");
+        view.makeRequest("find_news_since_date 2017-7-21");
         view.finish();
     }
 }

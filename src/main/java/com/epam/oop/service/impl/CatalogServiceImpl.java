@@ -17,6 +17,11 @@ import java.util.List;
  * @author Uladzislau Seuruk.
  */
 public class CatalogServiceImpl implements CatalogService {
+    /**
+     * Pattern for date validation.
+     */
+    private static final String DATE_PATTERN ="^\\d{4}-((0?\\d)|(1[012]))-((0?\\d)|([12]\\d)|(3[01]))$";
+
     @Override
     public void addNews(Category category, String title) throws ServiceException {
         try {
@@ -55,22 +60,24 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public List<News> getNewsByDate(String... dates) throws ServiceException {
-        checkParams(dates);
+    public List<News> getNewsByTitle(String... tags) throws ServiceException {
+        checkParams(tags);
         try {
             DaoFactory factory = DaoFactory.getInstance();
-            return factory.getNewsDao().getNewsByDate(dates);
+            return factory.getNewsDao().getNewsByTitle(tags);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public List<News> getNewsByTitle(String... tags) throws ServiceException {
-        checkParams(tags);
+    public List<News> getNewsSinceDate(String date) throws ServiceException {
+        if (!isDateValid(date)) {
+            throw new ServiceException("Received date has invalid format.");
+        }
         try {
             DaoFactory factory = DaoFactory.getInstance();
-            return factory.getNewsDao().getNewsByTitle(tags);
+            return factory.getNewsDao().getNewsSinceDate(date);
         } catch (DaoException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -111,5 +118,9 @@ public class CatalogServiceImpl implements CatalogService {
             }
         }
         return false;
+    }
+
+    private boolean isDateValid(String date) {
+        return date != null && date.matches(DATE_PATTERN);
     }
 }

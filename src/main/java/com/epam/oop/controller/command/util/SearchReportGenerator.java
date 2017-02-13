@@ -10,8 +10,6 @@ import java.util.List;
  * @author Uladzislau Seuruk.
  */
 public class SearchReportGenerator {
-    private SearchReportGenerator() {}
-
     /**
      * Generates report based on found news.
      *
@@ -36,4 +34,6 @@ public class SearchReportGenerator {
                 .append("\" Publication Date: ")
                 .append(news.getPublicationDate());
     }
+
+    private SearchReportGenerator() {}
 }

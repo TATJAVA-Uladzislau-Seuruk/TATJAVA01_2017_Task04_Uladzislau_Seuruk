@@ -26,8 +26,6 @@ public class ParameterParser {
      */
     public static final char VALUE_MARKER = '\"';
 
-    private ParameterParser() {}
-
     /**
      * Splits received <tt>String</tt> with parameters.
      *
@@ -87,4 +85,6 @@ public class ParameterParser {
         }
         return category;
     }
+
+    private ParameterParser() {}
 }

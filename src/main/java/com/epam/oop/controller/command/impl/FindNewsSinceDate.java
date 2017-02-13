@@ -16,27 +16,26 @@ import java.util.List;
  *
  * @author Uladzislau Seuruk.
  */
-public class FindNewsByDate implements Command {
-    private static final Logger LOG = LogManager.getRootLogger();
+public class FindNewsSinceDate implements Command {
     /**
      * Name of command.
      */
-    public static final String COMMAND_NAME = "FIND_NEWS_BY_DATE";
+    public static final String COMMAND_NAME = "FIND_NEWS_SINCE_DATE";
+    private static final Logger LOG = LogManager.getRootLogger();
 
     @Override
     public String execute(String params) {
         if (params == null) {
             return "String with params was not initialized.";
         }
+        params = params.trim();
         if (params.isEmpty()) {
             return "Search parameters are missing.";
         }
         String response;
         try {
-            String paramsDelim = String.valueOf(ParameterParser.PARAMETER_DELIMITER);
-            String[] paramsArray = params.split(paramsDelim);
             ServiceFactory factory = ServiceFactory.getInstance();
-            List<News> newsList = factory.getCatalogService().getNewsByDate(paramsArray);
+            List<News> newsList = factory.getCatalogService().getNewsSinceDate(params);
             response = SearchReportGenerator.generateReport(newsList);
         } catch (ServiceException e) {
             LOG.error(e.getMessage(), e);

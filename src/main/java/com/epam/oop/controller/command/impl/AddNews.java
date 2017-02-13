@@ -19,11 +19,11 @@ import java.util.Map;
  * @author Uladzislau Seuruk.
  */
 public class AddNews implements Command {
-    private static final Logger LOG = LogManager.getRootLogger();
     /**
      * Name of command.
      */
     public static final String COMMAND_NAME = "ADD_NEWS";
+    private static final Logger LOG = LogManager.getRootLogger();
 
     @Override
     public String execute(String params) {

@@ -21,7 +21,7 @@ final class CommandProvider {
         repository.put(AddNews.COMMAND_NAME, new AddNews());
         repository.put(FindNews.COMMAND_NAME, new FindNews());
         repository.put(FindNewsByCategory.COMMAND_NAME, new FindNewsByCategory());
-        repository.put(FindNewsByDate.COMMAND_NAME, new FindNewsByDate());
+        repository.put(FindNewsSinceDate.COMMAND_NAME, new FindNewsSinceDate());
         repository.put(FindNewsByTitle.COMMAND_NAME, new FindNewsByTitle());
         repository.put(WrongRequest.COMMAND_NAME, new WrongRequest());
     }

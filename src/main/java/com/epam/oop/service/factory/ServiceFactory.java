@@ -31,6 +31,8 @@ public class ServiceFactory {
         return instance;
     }
 
+    private ServiceFactory() {}
+
     /**
      * Returns instance of Service layer.
      */

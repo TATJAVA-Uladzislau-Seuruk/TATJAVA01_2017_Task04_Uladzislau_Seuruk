@@ -45,6 +45,13 @@ public final class ConnectionPool {
     private int poolSize;
 
     /**
+     * Returns instance of this class.
+     */
+    public static ConnectionPool getInstance() {
+        return instance;
+    }
+
+    /**
      * Initializes fields with values from property file.
      */
     private ConnectionPool() {
@@ -58,13 +65,6 @@ public final class ConnectionPool {
         } catch (NumberFormatException nfe) {
             poolSize = DEFAULT_POOL_SIZE;
         }
-    }
-
-    /**
-     * Returns instance of this class.
-     */
-    public static ConnectionPool getInstance() {
-        return instance;
     }
 
     /**

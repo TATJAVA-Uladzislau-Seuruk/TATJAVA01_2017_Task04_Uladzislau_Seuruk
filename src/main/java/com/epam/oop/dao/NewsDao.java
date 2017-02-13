@@ -45,7 +45,7 @@ public interface NewsDao {
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws DaoException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByDate(String... dates) throws DaoException;
+    List<News> getNewsSinceDate(String dates) throws DaoException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.

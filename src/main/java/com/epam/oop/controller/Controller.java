@@ -27,14 +27,14 @@ public final class Controller {
      */
     private static Controller instance = new Controller();
 
-    private Controller() {}
-
     /**
      * Returns instance of this class.
      */
     public static Controller getInstance() {
         return instance;
     }
+
+    private Controller() {}
 
     /**
      * Executes received command.

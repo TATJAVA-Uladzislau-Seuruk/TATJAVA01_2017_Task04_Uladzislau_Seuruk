@@ -17,14 +17,14 @@ public class DbPropertiesHandler {
      */
     private ResourceBundle bundle = ResourceBundle.getBundle("db");
 
-    private DbPropertiesHandler() {}
-
     /**
      * Returns instance of this class.
      */
     public static DbPropertiesHandler getInstance() {
         return instance;
     }
+
+    private DbPropertiesHandler() {}
 
     /**
      * Gets a property value for the received key.

@@ -32,6 +32,8 @@ public class DaoFactory {
         return instance;
     }
 
+    private DaoFactory() {}
+
     /**
      * Returns instance of News DAO.
      */

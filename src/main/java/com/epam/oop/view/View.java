@@ -20,6 +20,8 @@ public class View {
         return instance;
     }
 
+    private View() {}
+
     /**
      * TODO
      */

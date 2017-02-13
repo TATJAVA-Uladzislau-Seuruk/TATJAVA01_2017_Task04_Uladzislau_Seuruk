@@ -45,11 +45,11 @@ public class NewsBuilder {
         StringBuilder builder = new StringBuilder();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH) + 1;
-        builder.append(formatSmallValue(day))
-                .append(".")
+        builder.append(calendar.get(Calendar.YEAR))
+                .append("-")
                 .append(formatSmallValue(month))
-                .append(".")
-                .append(calendar.get(Calendar.YEAR));
+                .append("-")
+                .append(formatSmallValue(day));
         if (LOG.isDebugEnabled()) {
             LOG.debug(date.toString() + " : " + builder.toString());
         }
