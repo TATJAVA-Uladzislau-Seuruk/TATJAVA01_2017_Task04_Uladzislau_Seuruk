@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 /**
- * Implements Command interface for search command.
+ * Implements Command interface for global search command.
  *
  * @author Uladzislau Seuruk.
  */

@@ -78,6 +78,9 @@ public class SqlNewsDao implements NewsDao {
                 ConnectionPool.getInstance().closeConnection(connection);
             }
         }
+        if (newsSet == null) {
+            newsSet = new HashSet<>();
+        }
         return limitResult(new ArrayList<>(newsSet));
     }
 
@@ -119,6 +122,9 @@ public class SqlNewsDao implements NewsDao {
             if (connection != null) {
                 ConnectionPool.getInstance().closeConnection(connection);
             }
+        }
+        if (newsSet == null) {
+            newsSet = new HashSet<>();
         }
         return limitResult(new ArrayList<>(newsSet));
     }

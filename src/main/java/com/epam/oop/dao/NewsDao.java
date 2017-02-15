@@ -41,11 +41,11 @@ public interface NewsDao {
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received date.
      *
-     * @param dates <tt>String</tt>s with dates for search.
+     * @param date <tt>String</tt> with date for search.
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws DaoException if there were some troubles occurred during execution.
      */
-    List<News> getNewsSinceDate(String dates) throws DaoException;
+    List<News> getNewsSinceDate(String date) throws DaoException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.

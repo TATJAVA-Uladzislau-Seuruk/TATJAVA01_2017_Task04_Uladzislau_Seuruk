@@ -6,7 +6,7 @@ import com.epam.oop.dao.db.ConnectionPool;
 import com.epam.oop.dao.db.exception.ConnectionPoolException;
 
 /**
- * TODO.
+ * Implements <tt>DaoResourceManager</tt>.
  *
  * @author Uladzislau Seuruk.
  */

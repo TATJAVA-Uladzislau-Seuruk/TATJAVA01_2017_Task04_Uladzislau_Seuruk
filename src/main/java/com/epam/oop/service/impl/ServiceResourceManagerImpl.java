@@ -7,7 +7,7 @@ import com.epam.oop.service.ServiceResourceManager;
 import com.epam.oop.service.exception.ServiceException;
 
 /**
- * TODO.
+ * Implements <tt>ServiceResourceManager</tt>.
  *
  * @author Uladzislau Seuruk.
  */

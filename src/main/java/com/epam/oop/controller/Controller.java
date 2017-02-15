@@ -8,7 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Implementation of Controller layer.
+ * Implementation of Controller layer. For correct work <tt>start()</tt> method might be called
+ * before any other functional method and <tt>finish()</tt> method might be called after last
+ * functional method but before closing program.
  *
  * @author Uladzislau Seuruk.
  */
@@ -64,7 +66,8 @@ public final class Controller {
     }
 
     /**
-     * TODO
+     * Releases all necessary program resources. Might be called after last functional method and
+     * before closing program.
      */
     public void finish() {
         ServiceResourceManager manager = ServiceFactory.getInstance().getResourceManager();
@@ -72,9 +75,9 @@ public final class Controller {
     }
 
     /**
-     * TODO:
+     * Initializes necessary program resources. Might be called before any other functional method.
      *
-     * @return
+     * @return <tt>String</tt> with information.
      */
     public String start() {
         String response;

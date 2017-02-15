@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO
+ * Parses Strings with parameters.
  *
  * @author Uladzislau Seuruk.
  */
@@ -27,7 +27,7 @@ public class ParameterParser {
     public static final char VALUE_MARKER = '\"';
 
     /**
-     * Splits received <tt>String</tt> with parameters.
+     * Parses received <tt>String</tt> with parameters.
      *
      * @param params <tt>String</tt> with command parameters.
      * @return <tt>Map</tt> with command parameters.
@@ -67,11 +67,12 @@ public class ParameterParser {
     }
 
     /**
-     * TODO
+     * Returns <tt>Category</tt> that corresponds received <tt>String</tt> with category's name.
      *
-     * @param categoryParam
-     * @return
-     * @throws CategoryParsingException
+     * @param categoryParam <tt>String</tt> with name of requested category.
+     * @return <tt>Category</tt> that corresponds received <tt>String</tt>.
+     * @throws CategoryParsingException if received String wasn't initialized or does not match any
+     * known category.
      */
     public static Category parseCategory(String categoryParam) throws CategoryParsingException {
         if (categoryParam == null) {
@@ -80,7 +81,7 @@ public class ParameterParser {
         Category category;
         try {
             category = Category.valueOf(categoryParam.toUpperCase());
-        } catch (IllegalArgumentException | NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             throw new CategoryParsingException("Unknown category.");
         }
         return category;

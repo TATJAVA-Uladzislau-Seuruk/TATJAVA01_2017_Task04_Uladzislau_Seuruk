@@ -23,7 +23,7 @@ public class View {
     private View() {}
 
     /**
-     * TODO
+     * Closes program.
      */
     public void finish() {
         Controller.getInstance().finish();
@@ -42,7 +42,7 @@ public class View {
     }
 
     /**
-     * TODO
+     * Starts program.
      */
     public void start() {
         String response = Controller.getInstance().start();
