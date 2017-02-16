@@ -27,46 +27,45 @@ public class CatalogServiceImpl implements CatalogService {
         try {
             NewsBuilder builder = new NewsBuilder();
             News news = builder.build(category, title);
-            if (isNewsAlreadyInBase(news)) {
-                throw new ServiceException("Such news already exist.");
-            }
             DaoFactory factory = DaoFactory.getInstance();
             factory.getNewsDao().addNews(news);
         } catch (DaoException | NewsBuildException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<News> getNews(String... tags) throws ServiceException {
+    public List<News> getNews(String[] tags) throws ServiceException {
         checkParams(tags);
         try {
             DaoFactory factory = DaoFactory.getInstance();
             return factory.getNewsDao().getNews(tags);
         } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<News> getNewsByCategory(Category... categories) throws ServiceException {
-        checkParams(categories);
+    public List<News> getNewsByCategory(Category category) throws ServiceException {
+        if (category == null) {
+            throw new ServiceException("Category was not initialized.");
+        }
         try {
             DaoFactory factory = DaoFactory.getInstance();
-            return factory.getNewsDao().getNewsByCategory(categories);
+            return factory.getNewsDao().getNewsByCategory(category);
         } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<News> getNewsByTitle(String... tags) throws ServiceException {
+    public List<News> getNewsByTitle(String[] tags) throws ServiceException {
         checkParams(tags);
         try {
             DaoFactory factory = DaoFactory.getInstance();
             return factory.getNewsDao().getNewsByTitle(tags);
         } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 
@@ -79,18 +78,7 @@ public class CatalogServiceImpl implements CatalogService {
             DaoFactory factory = DaoFactory.getInstance();
             return factory.getNewsDao().getNewsSinceDate(date);
         } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-    }
-
-    private void checkParams(Category[] params) throws ServiceException {
-        if (params == null) {
-            throw new ServiceException("Array with parameters was not initialized.");
-        }
-        for (Category tag : params) {
-            if (tag == null) {
-                throw new ServiceException("Category was not initialized.");
-            }
+            throw new ServiceException(e);
         }
     }
 
@@ -106,18 +94,6 @@ public class CatalogServiceImpl implements CatalogService {
                 throw new ServiceException("String with parameter is empty.");
             }
         }
-    }
-
-    private boolean isNewsAlreadyInBase(News newsToAdd) throws ServiceException {
-        String category = newsToAdd.getCategory().toString();
-        String title = newsToAdd.getTitle();
-        List<News> newsList = getNews(category, title);
-        for (News news : newsList) {
-            if (news.equals(newsToAdd)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isDateValid(String date) {

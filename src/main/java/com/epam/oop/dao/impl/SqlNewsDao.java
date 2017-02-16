@@ -3,13 +3,15 @@ package com.epam.oop.dao.impl;
 import com.epam.oop.bean.Category;
 import com.epam.oop.bean.News;
 import com.epam.oop.dao.NewsDao;
-import com.epam.oop.dao.db.exception.DbManagerException;
+import com.epam.oop.dao.db.util.DbResourceManager;
 import com.epam.oop.dao.exception.DaoException;
 import com.epam.oop.dao.db.ConnectionPool;
-import com.epam.oop.dao.db.QueryExecutor;
 import com.epam.oop.dao.db.exception.ConnectionPoolException;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,41 +45,44 @@ public class SqlNewsDao implements NewsDao {
 
     @Override
     public void addNews(News news) throws DaoException {
-        Connection connection = null;
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            String[] params = { news.getCategory().toString(),
-                                news.getTitle(),
-                                news.getPublicationDate() };
-            QueryExecutor.getInstance().executeUpdate(connection, SQL_INSERT_NEWS, params);
-        } catch (ConnectionPoolException | DbManagerException e) {
-            throw new DaoException(e.getMessage(), e);
+        PreparedStatement ps = null;
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
+            ps = connection.prepareStatement(SQL_INSERT_NEWS);
+            ps.setString(1, news.getCategory().toString());
+            ps.setString(2, news.getTitle());
+            ps.setString(3, news.getPublicationDate());
+            ps.executeUpdate();
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new DaoException(e);
         } finally {
-            if (connection != null) {
-                ConnectionPool.getInstance().closeConnection(connection);
+            if (ps != null) {
+                DbResourceManager.closeStatement(ps);
             }
         }
     }
 
     @Override
-    public List<News> getNews(String... tagArray) throws DaoException {
-        Connection connection = null;
+    public List<News> getNews(String[] tagArray) throws DaoException {
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         Set<News> newsSet = null;
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
+
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
             for (String tag : tagArray) {
-                String[] params = { tag, "%" + tag + "%" };
-                Set<News> matchingSet = QueryExecutor.getInstance().executeSelect(
-                        connection, SQL_SELECT_BY_CATEGORY_OR_PART_IN_TITLE, params);
+                ps = connection.prepareStatement(SQL_SELECT_BY_CATEGORY_OR_PART_IN_TITLE);
+                ps.setString(1, tag);
+                ps.setString(2, "%" + tag + "%");
+                resultSet = ps.executeQuery();
+                Set<News> matchingSet = convertToSet(resultSet);
                 newsSet = findIntersection(newsSet, matchingSet);
             }
-        } catch (ConnectionPoolException | DbManagerException e) {
-            throw new DaoException(e.getMessage(), e);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new DaoException(e);
         } finally {
-            if (connection != null) {
-                ConnectionPool.getInstance().closeConnection(connection);
-            }
+            DbResourceManager.closeResultSet(resultSet);
+            DbResourceManager.closeStatement(ps);
         }
+
         if (newsSet == null) {
             newsSet = new HashSet<>();
         }
@@ -85,43 +90,46 @@ public class SqlNewsDao implements NewsDao {
     }
 
     @Override
-    public List<News> getNewsByCategory(Category... categories) throws DaoException {
-        Connection connection = null;
+    public List<News> getNewsByCategory(Category category) throws DaoException {
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         Set<News> newsSet = new HashSet<>();
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            for (Category category : categories) {
-                Set<News> matchingSet = QueryExecutor.getInstance().executeSelect(
-                        connection, SQL_SELECT_BY_CATEGORY, category.toString());
+
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
+                ps = connection.prepareStatement(SQL_SELECT_BY_CATEGORY);
+                ps.setString(1, category.toString());
+                resultSet = ps.executeQuery();
+                Set<News> matchingSet = convertToSet(resultSet);
                 newsSet.addAll(matchingSet);
-            }
-        } catch (ConnectionPoolException | DbManagerException e) {
-            throw new DaoException(e.getMessage(), e);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new DaoException(e);
         } finally {
-            if (connection != null) {
-                ConnectionPool.getInstance().closeConnection(connection);
-            }
+            DbResourceManager.closeResultSet(resultSet);
+            DbResourceManager.closeStatement(ps);
         }
+
         return limitResult(new ArrayList<>(newsSet));
     }
 
     @Override
-    public List<News> getNewsByTitle(String... tags) throws DaoException {
-        Connection connection = null;
+    public List<News> getNewsByTitle(String[] tags) throws DaoException {
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         Set<News> newsSet = null;
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
+
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
             for (String tag : tags) {
-                Set<News> matchingSet = QueryExecutor.getInstance().executeSelect(
-                        connection, SQL_SELECT_PART_IN_TITLE, "%" + tag + "%");
+                ps = connection.prepareStatement(SQL_SELECT_PART_IN_TITLE);
+                ps.setString(1, "%" + tag + "%");
+                resultSet = ps.executeQuery();
+                Set<News> matchingSet = convertToSet(resultSet);
                 newsSet = findIntersection(newsSet, matchingSet);
             }
-        } catch (ConnectionPoolException | DbManagerException e) {
-            throw new DaoException(e.getMessage(), e);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new DaoException(e);
         } finally {
-            if (connection != null) {
-                ConnectionPool.getInstance().closeConnection(connection);
-            }
+            DbResourceManager.closeResultSet(resultSet);
+            DbResourceManager.closeStatement(ps);
         }
         if (newsSet == null) {
             newsSet = new HashSet<>();
@@ -131,20 +139,33 @@ public class SqlNewsDao implements NewsDao {
 
     @Override
     public List<News> getNewsSinceDate(String date) throws DaoException {
-        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
         Set<News> newsSet;
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            newsSet = QueryExecutor.getInstance().executeSelect(
-                    connection, SQL_SELECT_SINCE_DATE, date);
-        } catch (ConnectionPoolException | DbManagerException e) {
-            throw new DaoException(e.getMessage(), e);
+        try (Connection connection = ConnectionPool.getInstance().getConnection()) {
+            ps = connection.prepareStatement(SQL_SELECT_SINCE_DATE);
+            ps.setString(1, date);
+            resultSet = ps.executeQuery();
+            newsSet = convertToSet(resultSet);
+        } catch (ConnectionPoolException | SQLException e) {
+            throw new DaoException(e);
         } finally {
-            if (connection != null) {
-                ConnectionPool.getInstance().closeConnection(connection);
-            }
+            DbResourceManager.closeResultSet(resultSet);
+            DbResourceManager.closeStatement(ps);
         }
         return limitResult(new ArrayList<>(newsSet));
+    }
+
+    private Set<News> convertToSet(ResultSet resultSet) throws SQLException {
+        Set<News> newsSet = new HashSet<>();
+        while (resultSet.next()) {
+            Category category = Category.valueOf(resultSet.getString(1));
+            News news = new News(category,
+                    resultSet.getString(2),
+                    resultSet.getString(3));
+            newsSet.add(news);
+        }
+        return newsSet;
     }
 
     private Set<News> findIntersection(Set<News> firstSet, Set<News> secondSet) {

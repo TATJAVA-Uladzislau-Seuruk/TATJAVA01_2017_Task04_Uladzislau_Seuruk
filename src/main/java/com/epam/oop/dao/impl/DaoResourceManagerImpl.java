@@ -16,7 +16,7 @@ public class DaoResourceManagerImpl implements DaoResourceManager {
         try {
             ConnectionPool.getInstance().initPoolData();
         } catch (ConnectionPoolException cpe) {
-            throw new DaoException(cpe.getMessage(), cpe);
+            throw new DaoException(cpe);
         }
     }
 

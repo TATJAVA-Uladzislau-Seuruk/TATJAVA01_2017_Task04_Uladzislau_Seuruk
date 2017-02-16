@@ -1,6 +1,7 @@
 package com.epam.oop.controller;
 
 import com.epam.oop.controller.command.Command;
+import com.epam.oop.controller.command.exception.InitializationException;
 import com.epam.oop.service.ServiceResourceManager;
 import com.epam.oop.service.exception.ServiceException;
 import com.epam.oop.service.factory.ServiceFactory;
@@ -76,19 +77,14 @@ public final class Controller {
 
     /**
      * Initializes necessary program resources. Might be called before any other functional method.
-     *
-     * @return <tt>String</tt> with information.
      */
-    public String start() {
-        String response;
+    public void start() {
         try {
             ServiceResourceManager manager = ServiceFactory.getInstance().getResourceManager();
             manager.initResources();
-            response = "Hello!";
         } catch (ServiceException e) {
             LOG.error("Resources initialization error.", e);
-            response = "Resources initialization error.";
+            throw new InitializationException("Resources initialization error.");
         }
-        return response;
     }
 }

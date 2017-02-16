@@ -24,20 +24,20 @@ public interface CatalogService {
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received tags.
      *
-     * @param tags <tt>String</tt> with keywords for search.
+     * @param tags array with keywords for search.
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    List<News> getNews(String... tags) throws ServiceException;
+    List<News> getNews(String[] tags) throws ServiceException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received category.
      *
-     * @param categories <tt>Category</tt> to search.
+     * @param category <tt>Category</tt> to search.
      * @return <tt>List</tt> with <tt>News</tt> that matches received category.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByCategory(Category... categories) throws ServiceException;
+    List<News> getNewsByCategory(Category category) throws ServiceException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that was added after received date.
@@ -51,9 +51,9 @@ public interface CatalogService {
     /**
      * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.
      *
-     * @param tags <tt>String</tt> with keywords for search.
+     * @param tags array with keywords for search.
      * @return <tt>List</tt> with <tt>News</tt> which title contains received tags.
      * @throws ServiceException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByTitle(String... tags) throws ServiceException;
+    List<News> getNewsByTitle(String[] tags) throws ServiceException;
 }

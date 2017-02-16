@@ -73,28 +73,32 @@ public class SqlNewsDaoTest {
     @Test
     public void negativeGetNewsByExtendedTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNewsByTitle("Thinking in Java", "for Dummies");
+        String[] params = new String[] {"Thinking in Java", "for Dummies"};
+        List<News> result = new SqlNewsDao().getNewsByTitle(params);
         assertFalse(result.contains(toFind));
     }
 
     @Test
     public void negativeGetNewsByPartlyMatchingTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNewsByTitle("Writing", "in Java");
+        String[] params = new String[] {"Writing", "in Java"};
+        List<News> result = new SqlNewsDao().getNewsByTitle(params);
         assertFalse(result.contains(toFind));
     }
 
     @Test
     public void negativeGetNewsExtendedTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Thinking in Java", "for Dummies");
+        String[] params = new String[] {"Thinking in Java", "for Dummies"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertFalse(result.contains(toFind));
     }
 
     @Test
     public void negativeGetNewsPartlyMatchingTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Writing", "in Java");
+        String[] params = new String[] {"Writing", "in Java"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertFalse(result.contains(toFind));
     }
 
@@ -108,7 +112,8 @@ public class SqlNewsDaoTest {
     @Test
     public void negativeGetNewsWrongCategoryTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Thinking in Java", "DISK");
+        String[] params = new String[] {"Thinking in Java", "DISK"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertFalse(result.contains(toFind));
     }
 
@@ -118,7 +123,8 @@ public class SqlNewsDaoTest {
         News toAdd = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
         SqlNewsDao dao = new SqlNewsDao();
         dao.addNews(toAdd);
-        List<News> newsList = dao.getNewsByTitle("Thinking in Java");
+        String[] params = new String[] {"Thinking in Java"};
+        List<News> newsList = dao.getNewsByTitle(params);
         assertTrue(newsList.contains(toAdd));
     }
 
@@ -132,49 +138,56 @@ public class SqlNewsDaoTest {
     @Test
     public void positiveGetNewsByExactTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNewsByTitle("Thinking in Java");
+        String[] params = new String[] {"Thinking in Java"};
+        List<News> result = new SqlNewsDao().getNewsByTitle(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsByPartOfTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNewsByTitle("in Java");
+        String[] params = new String[] {"in Java"};
+        List<News> result = new SqlNewsDao().getNewsByTitle(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsByTitleRegisterTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNewsByTitle("IN JAVA");
+        String[] params = new String[] {"IN JAVA"};
+        List<News> result = new SqlNewsDao().getNewsByTitle(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsCategoryTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("BOOK");
+        String[] params = new String[] {"BOOK"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsExactTitleTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Thinking in Java");
+        String[] params = new String[] {"Thinking in Java"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsMixedTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Think", "in", "BOOK");
+        String[] params = new String[] {"Think", "in", "BOOK"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertTrue(result.contains(toFind));
     }
 
     @Test
     public void positiveGetNewsRegisterTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("THINKING", "IN", "book");
+        String[] params = new String[] {"THINKING", "IN", "book"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertTrue(result.contains(toFind));
     }
 
@@ -195,7 +208,8 @@ public class SqlNewsDaoTest {
     @Test
     public void positiveGetNewsTitlePartsTest() throws Exception {
         News toFind = new News(Category.BOOK, "Thinking in Java", "2017-01-01");
-        List<News> result = new SqlNewsDao().getNews("Think", "Java");
+        String[] params = new String[] {"Think", "Java"};
+        List<News> result = new SqlNewsDao().getNews(params);
         assertTrue(result.contains(toFind));
     }
 

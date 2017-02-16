@@ -18,7 +18,7 @@ public class ServiceResourceManagerImpl implements ServiceResourceManager {
             DaoResourceManager manager = DaoFactory.getInstance().getResourceManager();
             manager.initResources();
         } catch (DaoException e) {
-            throw new ServiceException(e.getMessage(), e);
+            throw new ServiceException(e);
         }
     }
 

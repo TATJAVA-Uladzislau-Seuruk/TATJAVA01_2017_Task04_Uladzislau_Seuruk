@@ -17,11 +17,11 @@ import java.util.List;
  * @author Uladzislau Seuruk.
  */
 public class FindNews implements Command {
+    private static final Logger LOG = LogManager.getRootLogger();
     /**
      * Name of command.
      */
     public static final String COMMAND_NAME = "FIND_NEWS";
-    private static final Logger LOG = LogManager.getRootLogger();
 
     @Override
     public String execute(String params) {

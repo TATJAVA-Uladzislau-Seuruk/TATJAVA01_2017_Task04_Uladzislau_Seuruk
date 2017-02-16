@@ -9,6 +9,7 @@ import com.epam.oop.service.factory.ServiceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +18,11 @@ import java.util.List;
  * @author Uladzislau Seuruk.
  */
 public class FindNewsByTitle implements Command {
+    private static final Logger LOG = LogManager.getRootLogger();
     /**
      * Name of command.
      */
     public static final String COMMAND_NAME = "FIND_NEWS_BY_TITLE";
-    private static final Logger LOG = LogManager.getRootLogger();
 
     @Override
     public String execute(String params) {

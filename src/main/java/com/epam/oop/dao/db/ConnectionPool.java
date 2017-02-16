@@ -115,7 +115,6 @@ public final class ConnectionPool {
      * database was failed.
      */
     public void initPoolData() throws ConnectionPoolException {
-        Locale.setDefault(Locale.ENGLISH);
         try {
             Class.forName(driverName);
             busyConnectionQueue = new ArrayBlockingQueue<>(poolSize);
@@ -126,7 +125,7 @@ public final class ConnectionPool {
                 connectionQueue.add(pooledConnection);
             }
         } catch (SQLException | ClassNotFoundException e) {
-            throw new ConnectionPoolException(e.getMessage(), e);
+            throw new ConnectionPoolException(e);
         }
     }
 

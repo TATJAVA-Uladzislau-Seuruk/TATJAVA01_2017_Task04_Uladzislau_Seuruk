@@ -23,20 +23,20 @@ public interface NewsDao {
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received tags.
      *
-     * @param tags keywords for searching.
+     * @param tags array with keywords for searching.
      * @return <tt>List</tt> with <tt>News</tt> that matches received tags.
      * @throws DaoException if there were some troubles occurred during execution.
      */
-    List<News> getNews(String... tags) throws DaoException;
+    List<News> getNews(String[] tags) throws DaoException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received category.
      *
-     * @param categories <tt>Category</tt> for search.
+     * @param category <tt>Category</tt> for search.
      * @return <tt>List</tt> with <tt>News</tt> that matches received category.
      * @throws DaoException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByCategory(Category... categories) throws DaoException;
+    List<News> getNewsByCategory(Category category) throws DaoException;
 
     /**
      * Returns <tt>List</tt> with <tt>News</tt> that matches received date.
@@ -50,9 +50,9 @@ public interface NewsDao {
     /**
      * Returns <tt>List</tt> with <tt>News</tt> which title contains received tags.
      *
-     * @param tags <tt>String</tt>s with keywords for search.
+     * @param tags array with keywords for search.
      * @return <tt>List</tt> with <tt>News</tt> which title contains received tags.
      * @throws DaoException if there were some troubles occurred during execution.
      */
-    List<News> getNewsByTitle(String... tags) throws DaoException;
+    List<News> getNewsByTitle(String[] tags) throws DaoException;
 }

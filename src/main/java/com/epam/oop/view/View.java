@@ -45,7 +45,7 @@ public class View {
      * Starts program.
      */
     public void start() {
-        String response = Controller.getInstance().start();
-        System.out.println(response + "\n");
+        Controller.getInstance().start();
+        System.out.println("Hello!\n");
     }
 }

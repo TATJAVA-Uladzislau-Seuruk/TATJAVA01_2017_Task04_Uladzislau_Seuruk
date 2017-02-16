@@ -19,11 +19,11 @@ import java.util.List;
  * @author Uladzislau Seuruk.
  */
 public class FindNewsByCategory implements Command {
+    private static final Logger LOG = LogManager.getRootLogger();
     /**
      * Name of command.
      */
     public static final String COMMAND_NAME = "FIND_NEWS_BY_CATEGORY";
-    private static final Logger LOG = LogManager.getRootLogger();
 
     @Override
     public String execute(String params) {
@@ -35,14 +35,10 @@ public class FindNewsByCategory implements Command {
         }
         String response;
         try {
-            String paramsDelim = String.valueOf(ParameterParser.PARAMETER_DELIMITER);
-            String[] paramsArray = params.split(paramsDelim);
-            Category[] categories = new Category[paramsArray.length];
-            for (int i = 0; i < paramsArray.length; ++i) {
-                categories[i] = ParameterParser.parseCategory(paramsArray[i]);
-            }
+            params = params.trim();
+            Category category = ParameterParser.parseCategory(params);
             ServiceFactory factory = ServiceFactory.getInstance();
-            List<News> newsList = factory.getCatalogService().getNewsByCategory(categories);
+            List<News> newsList = factory.getCatalogService().getNewsByCategory(category);
             response = SearchReportGenerator.generateReport(newsList);
         } catch (ParameterParsingException e) {
             LOG.error(e.getMessage(), e);

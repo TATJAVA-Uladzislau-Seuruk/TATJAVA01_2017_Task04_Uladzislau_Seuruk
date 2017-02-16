@@ -1,4 +1,4 @@
-package com.epam.oop;
+package com.epam.oop.start;
 
 import com.epam.oop.view.View;
 
@@ -15,7 +15,7 @@ public class Main {
         view.makeRequest("add_news category=film title=\"\"");
         view.makeRequest("add_news category=film title=\"");
         view.makeRequest("add_news category=film");
-        view.makeRequest("add_news category=film title=\"Second Earth\"");
+        //view.makeRequest("add_news category=film title=\"Second Earth\"");
         view.makeRequest("find_news_by_category film");
         view.makeRequest("find_news_by_title 100");
         view.makeRequest("find_news 100 book");
